@@ -18,23 +18,10 @@ int main(int argc, const char * argv[]) {
     ofstream outFile;
     
     // open files
-    try { // attempt to open the input file
-        inFile.open(inPath.c_str());
-        if (inFile.fail())
-            throw -1;
-    } catch (int) {
-        cout << "\nERROR: The input file failed to open.\n\n";
-        return -1; // game over, man
-    }
-    
-    try { // attempt to open the output file
-        outFile.open(outPath.c_str());
-        if (outFile.fail())
-            throw -1;
-    } catch (int) {
-        cout << "\nERROR: The output file failed to open.\n\n";
-        return -1; // game over, man
-    }
+    bool validInput = openInput(inFile, inPath); // call the input-opening function
+    bool validOutput = openOutput(outFile, outPath); // call the output-opening function
+    if (!validInput || !validOutput)
+        return -1; // game over, bro.
     
     /* Part II: Scaffolding for the line-by-line loop */
     string currentLine; // define the line that is being analyzed on each iteration
@@ -45,9 +32,14 @@ int main(int argc, const char * argv[]) {
     /* Part III: The loop logic */
     do {
         getline(inFile, currentLine, ';'); // read each line of the input file
+        
+        /* check for empty lines that don't do anything */
         if (currentLine == "")
             continue; // skip to the next iteration
-        category instructionType;
+        
+        /* figure out the condition value to encode in binary */
+        unsigned int conditionValue = checkCondition(currentLine); // deciaml integer representing the condition code
+        
         /* Part IV: loop through each part of the instruction */
         switch (instructionType) {
         case data: // this is a data instruction
@@ -60,7 +52,12 @@ int main(int argc, const char * argv[]) {
             break;
         }
         
-    } while (!inFile.fail() && !inFile.eof());
-    getline(cin, currentLine, ';');
-    return 0;
+    } while (!inFile.fail() && !inFile.eof()); // go until the end of the file
+    
+    /* clean up your mess */
+    inFile.close();
+    inFile.clear();
+    outFile.close();
+    outFile.clear();
+    return 0; // we did it :D
 }

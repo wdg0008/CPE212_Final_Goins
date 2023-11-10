@@ -18,8 +18,16 @@
 
 using namespace std;
 
-void openInput(ifstream input, string path); // opens input file stream with error checks
+/* The following class definitions are empty error handling classes to help me read code */
+class InvalidSize {};
+class InvalidExtension {};
+class FailedOpening {};
 
-void openOutput(ofstream output, string path); // opens output file stream with error checks
+bool openInput(ifstream input, string path); // opens input file stream with error checks
+
+bool openOutput(ofstream output, string path); // opens output file stream with error checks
+
+unsigned int const checkCondition(string& instruction); // check the end of the instruction string for one of the conditions
+
 
 #endif /* finalFunctions_hpp */
