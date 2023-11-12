@@ -22,12 +22,20 @@ using namespace std;
 class InvalidSize {};
 class InvalidExtension {};
 class FailedOpening {};
+class BadInstruction {};
 
-bool openInput(ifstream input, string path); // opens input file stream with error checks
+bool openInput(ifstream& input, string& path); // opens input file stream with error checks
 
-bool openOutput(ofstream output, string path); // opens output file stream with error checks
+bool openOutput(ofstream& output, string& path); // opens output file stream with error checks
 
 unsigned int const checkCondition(string& instruction); // check the end of the instruction string for one of the conditions
 
+unsigned int getInstructionType(string excerpt); // return the op code for the instruction or decide it is a label
+
+unsigned int readRegister(string reg); // get the decimal index value of the register
+
+string getDataCmd(string instruction); // get the binary cmd value for the data-processing instruction as a string
+
+string snatch(string sourceLine); // riff off of extraction for a string input
 
 #endif /* finalFunctions_hpp */

@@ -9,7 +9,7 @@
 
 using namespace std;
 
-bool openInput(ifstream input, string path) { // open the input file
+bool openInput(ifstream& input, string& path) { // open the input file
     try { // attempt to open the input file
         string::size_type size = path.length();
         if (size < 3)
@@ -44,7 +44,7 @@ bool openInput(ifstream input, string path) { // open the input file
     }
 }
 
-bool openOutput(ofstream output, string path) { // opens output file stream with error checks
+bool openOutput(ofstream& output, string& path) { // opens output file stream with error checks
     try { // attempt to open the input file
         string::size_type size = path.length();
         if (size < 5)
@@ -87,7 +87,6 @@ unsigned int const checkCondition(string& instruction) { //
     if (instruction.size() <= 2)
         return 14; // the default condition AL is #15
     string ending = instruction.substr((instruction.size()-2),2); // get the suffix at the end of the instruction
-    int suffixDec = 15; // default condition AL is number 15
     string suffixes[count] = {"EQ", "NE", "CS", "CC", "MI", "PL", "VS", "VC", "HI", "LS", "GE", "LT", "GT", "LE"};
     
     for (int index = 0; index < count && suffixes[index] != ending; index++) { // check for presence of each suffix
@@ -95,4 +94,60 @@ unsigned int const checkCondition(string& instruction) { //
             return index;
     }
     return 14; // if no suffix was present, assime the AL suffix for constant execution.
+}
+
+unsigned int getInstructionType(string excerpt) {
+    string data[10] = {"MOV", "LSL", "LSR", "ASR", "ROR", "ADD", "SUB", "AND", "ORR", "CMP"}; // data-processing instructions
+    for (int i = 0; i < 10; i++) { // if the instruction is any of those in the array, it is data-processing.
+        if (excerpt == data[i])
+            return 0; // the op code in decimal
+    }
+    if (excerpt == "LDR" || excerpt == "STR")
+        return 1; // the op code for memory in decimal
+    else if (excerpt == "B" || excerpt == "BL")
+        return 2; // the op code for branching in decimal
+    else
+        return 3; // this signifies a label
+}
+
+unsigned int readRegister(string reg) { // it could be anything from 0-15, or written as "PC" or "LR"
+    if (reg == "PC")
+        return 15;
+    else if (reg == "LR")
+        return 14;
+    else if (reg == "SP")
+        return 13;
+    else {
+        string num;
+        if (reg.length() == 2) // in the form of RX
+            num = reg.substr(1,1); // grab one character after the first one
+        else // in the form of RXX
+            num = reg.substr(1,2); // grab the last two characters after the first one
+        return (stoi(num)); // return the string converted to an integer
+    }
+}
+
+string getDataCmd(string instruction) {
+    if (instruction == "ADD")
+        return "0100";
+    else if (instruction == "SUB")
+        return "0010";
+    else if (instruction == "AND")
+        return "";
+    else if (instruction == "ORR")
+        return "";
+    else if (instruction == "CMP")
+        return "";
+    else if (instruction == "MOV" || instruction == "LSL" || instruction == "LSR" || instruction == "ASR" || instruction == "ROR")
+        return "1101";
+    else
+        throw (BadInstruction());
+}
+
+string snatch(string sourceLine) {
+    string result = ""; // loop until whitespace, adding to the substring
+    for (int i = 0; (i < sourceLine.length()) && (sourceLine[i] != '\t') && (sourceLine[i] != '\n') && (sourceLine[i] != ' '); i++) {
+        result = result + sourceLine[i]; // concatenate the character to the string
+    }
+    return result;
 }
