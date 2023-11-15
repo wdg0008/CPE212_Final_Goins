@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		301C95122AE88E6400372F7E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 301C95112AE88E6400372F7E /* main.cpp */; };
 		301C95342AE99EAC00372F7E /* finalFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 301C95322AE99EAC00372F7E /* finalFunctions.cpp */; };
+		3028CD542B056D5200F823E9 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 3028CD522B056D5200F823E9 /* Makefile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +29,8 @@
 		301C95112AE88E6400372F7E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		301C95322AE99EAC00372F7E /* finalFunctions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = finalFunctions.cpp; sourceTree = "<group>"; };
 		301C95332AE99EAC00372F7E /* finalFunctions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = finalFunctions.hpp; sourceTree = "<group>"; };
+		3028CD522B056D5200F823E9 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		3028CD532B056D5200F823E9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +47,7 @@
 		301C95052AE88E6400372F7E = {
 			isa = PBXGroup;
 			children = (
+				3028CD532B056D5200F823E9 /* README.md */,
 				301C95102AE88E6400372F7E /* CPE212_Final_Goins */,
 				301C950F2AE88E6400372F7E /* Products */,
 			);
@@ -60,6 +64,7 @@
 		301C95102AE88E6400372F7E /* CPE212_Final_Goins */ = {
 			isa = PBXGroup;
 			children = (
+				3028CD522B056D5200F823E9 /* Makefile */,
 				301C95322AE99EAC00372F7E /* finalFunctions.cpp */,
 				301C95332AE99EAC00372F7E /* finalFunctions.hpp */,
 				301C95112AE88E6400372F7E /* main.cpp */,
@@ -124,6 +129,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3028CD542B056D5200F823E9 /* Makefile in Sources */,
 				301C95342AE99EAC00372F7E /* finalFunctions.cpp in Sources */,
 				301C95122AE88E6400372F7E /* main.cpp in Sources */,
 			);

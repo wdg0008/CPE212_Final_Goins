@@ -5,7 +5,7 @@
 //  Created by William Goins V on 10/24/23.
 //
 
-#include "finalFunctions.cpp"
+#include "finalFunctions.hpp"
 
 using namespace std;
 
