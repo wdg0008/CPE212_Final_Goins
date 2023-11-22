@@ -88,7 +88,7 @@ unsigned int const checkCondition(string& instruction) { //
         return 14; // the default condition AL is #15
     if (instruction.size() > 5)
         return 69; // this must be a label, so don't analyze it further or truncate it.
-    string ending = instruction.substr((instruction.size()-2),2); // get the suffix at the end of the instruction
+    string ending = instruction.substr(2,(instruction.size()-2)); // get the suffix at the end of the instruction
     string suffixes[count] = {"EQ", "NE", "CS", "CC", "MI", "PL", "VS", "VC", "HI", "LS", "GE", "LT", "GT", "LE"};
     
     for (int index = 0; index < count && suffixes[index] != ending; index++) { // check for presence of each suffix
@@ -101,14 +101,15 @@ unsigned int const checkCondition(string& instruction) { //
 }
 
 unsigned int getInstructionType(string excerpt) {
-    string data[10] = {"MOV", "LSL", "LSR", "ASR", "ROR", "ADD", "SUB", "AND", "ORR", "CMP"}; // data-processing instructions
+    const string data[10] = {"MOV", "LSL", "LSR", "ASR", "ROR", "ADD", "SUB", "AND", "ORR", "CMP"}; // data-processing instructions
+    string size3 = excerpt.substr(0,3); // ignore any potential suffix information
     for (int i = 0; i < 10; i++) { // if the instruction is any of those in the array, it is data-processing.
-        if (excerpt == data[i])
+        if (size3 == data[i])
             return 0; // the op code in decimal
     }
-    if (excerpt == "LDR" || excerpt == "STR")
+    if (size3 == "LDR" || size3 == "STR")
         return 1; // the op code for memory in decimal
-    else if (excerpt == "B" || excerpt == "BL")
+    else if (excerpt.substr(0,1) == "B" || excerpt.substr(0,2) == "BL") // check for smaller instructions
         return 2; // the op code for branching in decimal
     else
         return 3; // this signifies a label
@@ -131,7 +132,9 @@ unsigned int readRegister(string reg) { // THROWS InvalidString(); it could be a
     }
 }
 
-int readImmediate(string imm) { // TODO: consider adding an error to check if the whole string was just '#' and avoid length <= 0
+int readImmediate(string imm) {
+    if (imm.length() == 1)
+        throw InvalidString();
     return stoi(imm.substr(1, (imm.length()-1) ) ); // calls stoi to extract an int from the string, beginning at 2nd char
 }
 
@@ -142,23 +145,15 @@ string getDataCmd(string instruction) {
     else if (instruction == "SUB")
         return "0010";
     else if (instruction == "AND")
-        return "";
+        return "0000";
     else if (instruction == "ORR")
-        return "";
+        return "1100";
     else if (instruction == "CMP")
-        return "";
+        return "1010";
     else if (instruction == "MOV" || instruction == "LSL" || instruction == "LSR" || instruction == "ASR" || instruction == "ROR")
         return "1101";
     else
         throw (BadInstruction());
-}
-
-string snatch(string sourceLine) { // TODO: make this use vectors or something to split up each part of the line, not just the first
-    string result = ""; // loop until whitespace, adding to the substring
-    for (int i = 0; (i < sourceLine.length()) && (sourceLine[i] != '\t') && (sourceLine[i] != '\n') && (sourceLine[i] != ' '); i++) {
-        result = result + sourceLine[i]; // concatenate the character to the string
-    }
-    return result;
 }
 
 string intToBinaryString(int decimalValue) { // steal code from prior project for this
@@ -229,4 +224,30 @@ string stringBinToHex(string binaryString) {
             throw InvalidString();
     }
     return hexString;
+}
+
+template <size_t X, size_t Y>
+bitset<X +Y> cat(const bitset<X>& b1, const bitset<Y>& b2) { // concatenate two bitsets into one
+    string U = b1.to_string(); // convert to a string
+    string V = b2.to_string(); // convert to a string
+    return bitset<X+Y>(U + V); // operate on the concatenated strings
+}
+
+bool findStringChar(string& info, char target) { // returns true if character present in string
+    return (info.find(target) != string::npos);
+}
+
+bool stringInArray(const string& item, const string searchSpace[], unsigned int spaceSize) {
+    for (int c = 0; c < spaceSize; c++) {
+        if (item == searchSpace[c])
+            return true;
+    }
+    return false;
+}
+
+int scrubString(string& info) {
+    info = info.substr(1,info.size()-1); // cut out the first character
+    if (findStringChar(info, ','))
+        info = info.substr(0,info.size()-1); // cut off the comma at the end, if present
+    return stoi(info);
 }

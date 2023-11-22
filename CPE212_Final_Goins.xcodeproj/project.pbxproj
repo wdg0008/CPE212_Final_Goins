@@ -9,7 +9,15 @@
 /* Begin PBXBuildFile section */
 		301C95122AE88E6400372F7E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 301C95112AE88E6400372F7E /* main.cpp */; };
 		301C95342AE99EAC00372F7E /* finalFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 301C95322AE99EAC00372F7E /* finalFunctions.cpp */; };
-		3028CD542B056D5200F823E9 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 3028CD522B056D5200F823E9 /* Makefile */; };
+		307DC4F82B0AA37500B8DFEC /* instruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 307DC4F62B0AA37500B8DFEC /* instruction.cpp */; };
+		307DC4FB2B0AA3AD00B8DFEC /* dataInstruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 307DC4F92B0AA3AD00B8DFEC /* dataInstruction.cpp */; };
+		307DC4FE2B0AA3FD00B8DFEC /* dataImmediate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 307DC4FC2B0AA3FD00B8DFEC /* dataImmediate.cpp */; };
+		307DC5012B0AA9AD00B8DFEC /* dataRegister.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 307DC4FF2B0AA9AD00B8DFEC /* dataRegister.cpp */; };
+		307DC5042B0AAC3E00B8DFEC /* dataShifted.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 307DC5022B0AAC3E00B8DFEC /* dataShifted.cpp */; };
+		307DC5072B0AAE4600B8DFEC /* memoryInstruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 307DC5052B0AAE4600B8DFEC /* memoryInstruction.cpp */; };
+		307DC50A2B0AB14500B8DFEC /* memoryImmediate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 307DC5082B0AB14500B8DFEC /* memoryImmediate.cpp */; };
+		307DC50D2B0AB2DD00B8DFEC /* memoryRegister.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 307DC50B2B0AB2DD00B8DFEC /* memoryRegister.cpp */; };
+		307DC5102B0AB4BC00B8DFEC /* branchInstruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 307DC50E2B0AB4BC00B8DFEC /* branchInstruction.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +39,24 @@
 		301C95332AE99EAC00372F7E /* finalFunctions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = finalFunctions.hpp; sourceTree = "<group>"; };
 		3028CD522B056D5200F823E9 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		3028CD532B056D5200F823E9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		307DC4F62B0AA37500B8DFEC /* instruction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = instruction.cpp; path = CPE212_Final_Goins/instruction.cpp; sourceTree = "<group>"; };
+		307DC4F72B0AA37500B8DFEC /* instruction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = instruction.hpp; path = CPE212_Final_Goins/instruction.hpp; sourceTree = "<group>"; };
+		307DC4F92B0AA3AD00B8DFEC /* dataInstruction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dataInstruction.cpp; path = CPE212_Final_Goins/dataInstruction.cpp; sourceTree = "<group>"; };
+		307DC4FA2B0AA3AD00B8DFEC /* dataInstruction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dataInstruction.hpp; path = CPE212_Final_Goins/dataInstruction.hpp; sourceTree = "<group>"; };
+		307DC4FC2B0AA3FD00B8DFEC /* dataImmediate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dataImmediate.cpp; path = CPE212_Final_Goins/dataImmediate.cpp; sourceTree = "<group>"; };
+		307DC4FD2B0AA3FD00B8DFEC /* dataImmediate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dataImmediate.hpp; path = CPE212_Final_Goins/dataImmediate.hpp; sourceTree = "<group>"; };
+		307DC4FF2B0AA9AD00B8DFEC /* dataRegister.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dataRegister.cpp; path = CPE212_Final_Goins/dataRegister.cpp; sourceTree = "<group>"; };
+		307DC5002B0AA9AD00B8DFEC /* dataRegister.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dataRegister.hpp; path = CPE212_Final_Goins/dataRegister.hpp; sourceTree = "<group>"; };
+		307DC5022B0AAC3E00B8DFEC /* dataShifted.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dataShifted.cpp; path = CPE212_Final_Goins/dataShifted.cpp; sourceTree = "<group>"; };
+		307DC5032B0AAC3E00B8DFEC /* dataShifted.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dataShifted.hpp; path = CPE212_Final_Goins/dataShifted.hpp; sourceTree = "<group>"; };
+		307DC5052B0AAE4600B8DFEC /* memoryInstruction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = memoryInstruction.cpp; path = CPE212_Final_Goins/memoryInstruction.cpp; sourceTree = "<group>"; };
+		307DC5062B0AAE4600B8DFEC /* memoryInstruction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = memoryInstruction.hpp; path = CPE212_Final_Goins/memoryInstruction.hpp; sourceTree = "<group>"; };
+		307DC5082B0AB14500B8DFEC /* memoryImmediate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = memoryImmediate.cpp; path = CPE212_Final_Goins/memoryImmediate.cpp; sourceTree = "<group>"; };
+		307DC5092B0AB14500B8DFEC /* memoryImmediate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = memoryImmediate.hpp; path = CPE212_Final_Goins/memoryImmediate.hpp; sourceTree = "<group>"; };
+		307DC50B2B0AB2DD00B8DFEC /* memoryRegister.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = memoryRegister.cpp; path = CPE212_Final_Goins/memoryRegister.cpp; sourceTree = "<group>"; };
+		307DC50C2B0AB2DD00B8DFEC /* memoryRegister.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = memoryRegister.hpp; path = CPE212_Final_Goins/memoryRegister.hpp; sourceTree = "<group>"; };
+		307DC50E2B0AB4BC00B8DFEC /* branchInstruction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = branchInstruction.cpp; path = CPE212_Final_Goins/branchInstruction.cpp; sourceTree = "<group>"; };
+		307DC50F2B0AB4BC00B8DFEC /* branchInstruction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = branchInstruction.hpp; path = CPE212_Final_Goins/branchInstruction.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +73,24 @@
 		301C95052AE88E6400372F7E = {
 			isa = PBXGroup;
 			children = (
+				307DC50E2B0AB4BC00B8DFEC /* branchInstruction.cpp */,
+				307DC50F2B0AB4BC00B8DFEC /* branchInstruction.hpp */,
+				307DC50B2B0AB2DD00B8DFEC /* memoryRegister.cpp */,
+				307DC50C2B0AB2DD00B8DFEC /* memoryRegister.hpp */,
+				307DC5082B0AB14500B8DFEC /* memoryImmediate.cpp */,
+				307DC5092B0AB14500B8DFEC /* memoryImmediate.hpp */,
+				307DC5052B0AAE4600B8DFEC /* memoryInstruction.cpp */,
+				307DC5062B0AAE4600B8DFEC /* memoryInstruction.hpp */,
+				307DC5022B0AAC3E00B8DFEC /* dataShifted.cpp */,
+				307DC5032B0AAC3E00B8DFEC /* dataShifted.hpp */,
+				307DC4FF2B0AA9AD00B8DFEC /* dataRegister.cpp */,
+				307DC5002B0AA9AD00B8DFEC /* dataRegister.hpp */,
+				307DC4FC2B0AA3FD00B8DFEC /* dataImmediate.cpp */,
+				307DC4FD2B0AA3FD00B8DFEC /* dataImmediate.hpp */,
+				307DC4F92B0AA3AD00B8DFEC /* dataInstruction.cpp */,
+				307DC4FA2B0AA3AD00B8DFEC /* dataInstruction.hpp */,
+				307DC4F62B0AA37500B8DFEC /* instruction.cpp */,
+				307DC4F72B0AA37500B8DFEC /* instruction.hpp */,
 				3028CD532B056D5200F823E9 /* README.md */,
 				301C95102AE88E6400372F7E /* CPE212_Final_Goins */,
 				301C950F2AE88E6400372F7E /* Products */,
@@ -129,8 +173,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3028CD542B056D5200F823E9 /* Makefile in Sources */,
+				307DC5042B0AAC3E00B8DFEC /* dataShifted.cpp in Sources */,
+				307DC50A2B0AB14500B8DFEC /* memoryImmediate.cpp in Sources */,
+				307DC5012B0AA9AD00B8DFEC /* dataRegister.cpp in Sources */,
+				307DC50D2B0AB2DD00B8DFEC /* memoryRegister.cpp in Sources */,
+				307DC5072B0AAE4600B8DFEC /* memoryInstruction.cpp in Sources */,
+				307DC5102B0AB4BC00B8DFEC /* branchInstruction.cpp in Sources */,
+				307DC4FE2B0AA3FD00B8DFEC /* dataImmediate.cpp in Sources */,
+				307DC4FB2B0AA3AD00B8DFEC /* dataInstruction.cpp in Sources */,
 				301C95342AE99EAC00372F7E /* finalFunctions.cpp in Sources */,
+				307DC4F82B0AA37500B8DFEC /* instruction.cpp in Sources */,
 				301C95122AE88E6400372F7E /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

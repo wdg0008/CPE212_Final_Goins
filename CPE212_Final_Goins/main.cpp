@@ -6,6 +6,12 @@
 //
 
 #include "finalFunctions.hpp"
+#include "instruction.hpp" // parent instruction class, followed by children and grandchildren
+#include "dataImmediate.hpp"
+#include "dataRegister.hpp"
+#include "dataShifted.hpp"
+#include "memoryImmediate.hpp"
+#include "memoryRegister.hpp"
 
 using namespace std;
 
@@ -30,6 +36,8 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
     /* Part II: Scaffolding for the line-by-line loop */
     string currentLine; // define the line that is being analyzed on each iteration
     enum category {data = 0, memory, branch, label}; // define the categories of instruction
+    const string dataList[10] = {"MOV", "LSL", "LSR", "ASR", "ROR", "ADD", "SUB", "AND", "ORR", "CMP"};
+    const string dataShifting[4] = {"LSL", "LSR", "ASR", "ROR"};
     
     /* Part III: The loop logic */
     for (int lineCount = 0; !inFile.fail() && !inFile.eof(); lineCount++) { // counter starts at 0, x4 for the address
@@ -39,17 +47,21 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
         if (currentLine == "")
             continue; // skip to the next iteration
         
-        /* Get the first word of the line to see if it is a label or what type of instruction it is */
-        category instructionType; // define an enum for which type of instruction it is
-        string first;
-        first = snatch(currentLine); // store the first part of the line (the instruction or a label)
+        stringstream line; // stream to make the string act like the input file without changing the actual input file
+        line << currentLine; // store the current line into a seperate stream
         
-        // TODO: The order of this needs revision and updating so that the ends of labels are not truncated, but actual instructions do have their suffixes trimmed. The function could still confuse labels with at least conditional BL statements.
+        /* Get the first word of the line to see if it is a label or type of instruction */
+        string first;
+        line >> first; // store the first part of the line (the instruction or a label)
+        
+        category instructionType; // define an enum for which type of instruction it is
+        unsigned int decimalOpCode = getInstructionType(first); // get operation code
+        instructionType = category(decimalOpCode); // cast the opcode to an instruction type for switch statements
+        
         /* figure out the condition value and opcode to encode in binary (a.k.a., the first six bits) */
         unsigned int conditionValue = checkCondition(first); // decimal integer representing the condition code
         // THE ABOVE OPERATION WILL TRIM SUFFIXES OFF OF THE INSTRUCTIONS
-        unsigned int decimalOpCode = getInstructionType(first); // get operation code
-        instructionType = category(decimalOpCode); // cast the opcode to an instruction type for switch statements
+        
         
         string binaryResult, hexOutput; // strings to hold the binary concatenation and the final hex output to write
         /* I <3 C++ STL https://www.geeksforgeeks.org/map-associative-containers-the-c-standard-template-library-stl/ */
@@ -59,6 +71,7 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
         switch (instructionType) {
             case data: { // this is a data instruction
                 // might still be a multiplication instruction, but these are not implemented in the prooject
+                // DataInstruction process;
                 
                 try { // this might not be a valid instruction.
                     string cmd = getDataCmd("PLACEHOLDER"); // store the command in a binary string
@@ -71,19 +84,46 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
                 } // If we made it this far, the instruction is indeed valid
                 
                 string Rd, Rn, Src2; // strings for the source, destination, and second source fields
-                bool I = (currentLine.find('#') != string::npos); // check if the line operates on immediates
-                bool S; // keeps track of whether this is an immediate or shifts something
-                if (I) { // search for a # to check if immediates are used
-                    I = true; // this is acting on an immediate
-                    
-                    /* Begin the list of if statements corresponding to each intruction that is valid */
-                    if (first == "MOV")
-                        Src2 = "";
-                    
+                line >> Rd; // read in the destination register
+                if (first != "MOV")
+                line >> Rn; // read in the source register
+                if (stringInArray(first, dataShifting, 4)) {
+                    // This will shift the register, so it is either an immediate-shifter or register-shifted register
+                    // Instruction is one of: AND, EOR, OR, SUB, NOT, RSB, ADD, BIC, ADC, SBC, ORR, MOV, TST
+                    if (findStringChar(currentLine, '#')) {
+                        // This is an immediate-shifter
+                        DataRegister regInst;
+                        regInst.set_S(true);
+                    } else {
+                        // This is a register-shifting register operation
+                        DataShifted shiftInst;
+                    }
                 } else {
-                    I = false; // this is acting only on registers
+                    // This will NOT shift the register, so it is either operating on immediates or two registers with shamt5 = 0
+                    // Instruction is one of: LSL, LSR, ASR, ROR, RRX
+                    if (findStringChar(currentLine, '#')) {
+                        // This is operating directly on unshifted immediates
+                        DataImmediate immInst;
+
+                        try {
+                            immInst.set_cmd(first);
+                        } catch (BadInstruction) {
+                            cout << "\nERROR: The data-processing instruction encountered is not supported. For details, see the README.md or Github Wiki.\n\n";
+                            return -1;
+                        } catch (...) {
+                            cout << "\nERROR: Unknown error encountered. Terminating program.\n\n";
+                            return -1;
+                        }
+                        string immediate;
+                        line >> immediate;
+                        immInst.set_imm8(immediate);
+                    } else {
+                        // This is operating on two nonshifting registers
+                        DataRegister regInst;
+                    }
                 }
-                // outFile << cond + op + I + cmd + S + Rn + Rd + Src2 << endl;
+
+                
                 break;
             }
             case memory: {
