@@ -25,6 +25,10 @@ public:
     // set the shifting mode to use based on what type of instruction it is
     // Not really sure what to put here, need to review the stuff in the book
     
+    void set_Rm(string& info);
+    // sets the register source holding the address offset to load from memory
+    // TODO: Research when this is actually used and what it does
+    
     void setBinaryEncoding();
     // Implements the grandparent pure virtual function
     // This will return, in binary, the following fields in the following order:

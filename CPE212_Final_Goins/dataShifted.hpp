@@ -18,6 +18,10 @@ private:
     // LITERAL '1' PRESENT AT INDEX 5
     bitset<4> Rm; // second source register
 public:
+    DataShifted();
+    // default constructor sets Rn (source one) to zero
+    // Exists to appease the compiler
+    
     void set_Rs(string& info);
     // sets the index of the shift register to its binary value
     // this register holds the amount to shift others by

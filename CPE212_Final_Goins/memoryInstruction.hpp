@@ -13,13 +13,20 @@
 class MemoryInstruction: public Instruction {
 private:
     bool I; // true for operations involving immediates
-    bool P;
-    bool U;
-    bool B;
-    bool W;
-    bool L;
+    bool P; // the Pre-Index bit is true for pre-index AND offset mode, but false for post-index
+    bool U; // add offfset to base when true, subtract when false
+    bool B; // true if loading or storing only a byte, false otherwise (ONLY FALSE FOR NOW)
+    bool W; // writeback bit is true for pre-indexed mode
+    bool L; // true for load instructions, false for store instrucitons
+    /* The following details what bits are set for which indexing mode:
+     Offset: LDR R0, [R1, R2]
+     This will load R1+R2 into R0 without overwriting anyting. P is true and W is NOT
+     Pre-Index: LDR R0, [R1, R2]!
+     This will load R1+R2 into R0 AND overwrite R1 with R1+R2. P is true and W is true
+     Post-Index: LDR R0, [R1], R2
+     This will load R1 into R0 before overwriting R1 with R1+R2. P and W are BOTH FALSE
+     */
 protected:
-    bitset<6> funct; // a bitset to contain the above six bools
     bitset<4> Rn; // the index of the source register
     bitset<4> Rd; // the index of the destination register
 public:
@@ -40,16 +47,14 @@ public:
     // will need to strip off 'R' and any commas
     // will be a wrapper for lots of bitset functionality
     
-    void build_funct();
-    // assembles the six bools into the 6-wide bitstream for future use
-    // This will probably reference a more generic bool-to-bitstream function
-    // A function that can add bits from bools to a bitstream is also going to be useful
-    
     void accede(Instruction parent);
     // virtual function will copy all the parent data to the child class
+    // TODO: Evaluate this function for removal
     
-    void setOp();
-    // sets the operation code to 01
+    void setBinaryEncoding();
+    // virtual function will set cond, op, funct, Rn, and Rd
+    // Everything except Src2 is specified in this funciton, children finish it
+    // just filling in a bitset
 };
 
 #endif /* memoryInstruction_hpp */

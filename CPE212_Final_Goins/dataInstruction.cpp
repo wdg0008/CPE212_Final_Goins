@@ -39,22 +39,49 @@ void DataInstruction::set_cmd(string& instruction) {
         throw (BadInstruction());
 }
 
-void DataInstruction::set_funct() {
-    bitset<6> f;
-    if (I) // start with the immediate bit
-        f.set(0);
-    else
-        f.reset(0);
-    for (int c = 1; c <= 4; c++) { // loop through each index of cmd bitset
-        if (cmd[c] == 1) // if the bit is one, then copy it
-            f.set(c);
+void DataInstruction::set_Rn(string& info) {
+    Rn = bitset<4>(readRegister(info)); // parse the register string for an unsigned int, then cast to 4 bits
+}
+
+void DataInstruction::set_Rd(string& info) {
+    Rd = bitset<4>(readRegister(info)); // parse the register string for an unsigned int, then cast to 4 bits
+}
+
+void DataInstruction::setBinaryEncoding() {
+    for (int a = 0; a <= 3; a++) { // set first four bits to cond
+        if (cond[a] == 1)
+            binaryEncoding.set(a);
         else
-            f.reset(c);
+            binaryEncoding.reset(a);
     }
-    if (S) // start with the immediate bit
-        f.set(5);
+    binaryEncoding.reset(4); // bits 27 and 26 are the op value, which is 00 for data procesisng
+    binaryEncoding.reset(5);
+    if (I) {
+        binaryEncoding.set(6);
+    } else {
+        binaryEncoding.reset(6);
+    }
+    for (int b = 0; b <= 4; b++) { // set bits 24-21 to cmd
+        if (cmd[b] == 1)
+            binaryEncoding.set(b+7);
+        else
+            binaryEncoding.reset(b+7);
+    }
+    if (S) // set bit 20 based on S
+        binaryEncoding.set(11);
     else
-        f.reset(5);
-    funct = f; // save the funct bitset into the object
+        binaryEncoding.reset(11);
+    for (int d = 0; d <= 3; d++) { // set bits 19-16 to Rn
+        if (Rn[d] == 1)
+            binaryEncoding.set(d+12);
+        else
+            binaryEncoding.reset(d+12);
+    }
+    for (int e = 0; e <= 3; e++) { // set bits 15-12 to Rd
+        if (Rd[e] == 1)
+            binaryEncoding.set(e+16);
+        else
+            binaryEncoding.reset(e+16);
+    }
     return;
 }

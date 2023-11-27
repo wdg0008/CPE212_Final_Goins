@@ -23,12 +23,16 @@ unsigned long Instruction::getDecimalEncoding() {
     return binaryEncoding.to_ulong();
 }
 
+Instruction::Instruction() {}; // apparently, this is required even for abstract classes
 
+bitset<32> Instruction::getInstructionWord() {
+    return binaryEncoding;
+}
 
 string Instruction::getHexEncoding() {
     string binString = binaryEncoding.to_string(); // convert the bits to a string
     string hexString;
-    for (int count = 0; count < 32; count++) { // loop through each 4-bit chunk
+    for (int count = 0; count < 7; count++) { // loop through each 4-bit chunk
         string smol = binString.substr(4*count,4); // grab four bits at a time, starting at zero times the loop count
         /* The if statements below are essentially creating the table I look at to convert, since actual math is hard */
         if (smol == "0000") // this should really be a case statement, but C++ dynamic strings do not work like that

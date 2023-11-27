@@ -9,21 +9,32 @@
 
 void MemoryRegister::setBinaryEncoding() {
     // cond, op, funct, Rn, Rd, shamt5, sh, '1', Rm
-    bitset<6> begin = cat(cond, op);
-    build_funct();
-    bitset<12> half1 = cat(begin, funct);
-    bitset<8> midreg = cat(Rn, Rd);
-    
-    bitset<7> temp0 = cat(shamt5, sh);
-    bitset<5> temp1; // combine a 1 with Rm
-    temp1.set(0); // always a 1
-    for (int c = 1; c <= 5; c++) {
-        if (Rm[c] == 1)
-            temp1.set(c);
-        else
-            temp1.reset(c);
+    MemoryInstruction::setBinaryEncoding(); // parent virtual funciton does first 20 bits
+    for (int e = 0; e <= 4; e++) { // put shamt5 into the instruction
+        if (shamt5[e] == 1) {
+            binaryEncoding.set(e+20);
+        } else {
+            binaryEncoding.reset(e+20);
+        }
     }
-    bitset<12> Src2 = cat(temp0, temp1);
-    bitset<20> half2 = cat(midreg, Src2);
-    binaryEncoding = cat(half1, half2);
+    for (int f = 0; f <= 1; f++) { // put sh into the instruction
+        if (sh[f] == 1) {
+            binaryEncoding.set(f+25);
+        } else {
+            binaryEncoding.reset(f+25);
+        }
+    }
+    binaryEncoding.set(27); // this bit is always set
+    for (int g = 0; g <= 3; g++) { // put Rm into the instruction
+        if (Rm[g] == 1) {
+            binaryEncoding.set(g+28);
+        } else {
+            binaryEncoding.reset(g+28);
+        }
+    }
+    return;
+}
+
+void MemoryRegister::set_Rm(string& info) {
+    Rm = bitset<4>(readRegister(info)); // parse the register string for an unsigned int, then cast to 4 bits
 }

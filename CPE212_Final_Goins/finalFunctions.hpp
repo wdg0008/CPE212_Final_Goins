@@ -48,9 +48,6 @@ string intToBinaryString(int decimalValue);
 
 string stringBinToHex(string binaryString);
 
-template <size_t X, size_t Y> // not exactly sure if this is the best option, see https://stackoverflow.com/questions/3061721/concatenate-boostdynamic-bitset-or-stdbitset
-bitset<X +Y> cat(const bitset<X>& b1, const bitset<Y>& b2); // concatenate two bitsets into a single bitset
-
 bool findStringChar(string& info, char target); // returns true if character present in string
 
 bool stringInArray(const string& item, const string searchSpace[], unsigned int spaceSize);

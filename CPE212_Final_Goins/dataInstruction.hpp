@@ -15,7 +15,6 @@ protected:
     bool I; // immediate bit (true if operating on an immediate)
     bitset<4> cmd; // four bits for command
     bool S; // shift bit (true if shifting the value)
-    bitset<6> funct; // a bitset to contain I, cmd, and S
     bitset<4> Rd; // destination register index
     bitset<4> Rn; // source register index
 public:
@@ -34,13 +33,13 @@ public:
     // Sets the cmd value corresponding to which instruction is being executed.
     // Each instruction has a unique cmd value, except for moves, shifts, and rotates
     
-    void set_funct();
-    // builds the funct bitset from I, cmd, and S
-    
-    void setRn(unsigned int index);
+    void set_Rn(string& info);
     // sets the source register to the value of the index
     
-    void setRd(unsigned int index);
+    void set_Rd(string& info);
     // sets the source register to the value of the index
+    
+    void setBinaryEncoding();
+    // virtual function that sets fields in the binary encoding common to all data instructions
 };
 #endif /* dataInstruction_hpp */

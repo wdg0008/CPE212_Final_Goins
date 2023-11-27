@@ -17,6 +17,9 @@ private:
     // ZERO IS PRESENT BY DEFAULT AT INDEX 4
     bitset<4> Rm; // second source register
 public:
+    DataRegister();
+    // Default constructor doesn't do a whole lot, but exists to appease the compiler
+    
     void set_shamt5(string& info);
     // set the amount to shift by, depending on the instruction
     // NOTE: Not really sure when this is important or useful, so will be done much later
@@ -24,6 +27,10 @@ public:
     void set_sh(string& info);
     // set the sh value to switch what shift mode is used, if any
     // how the hardware interprets differences between LSL, LSR, ASR, etc.
+    
+    void set_Rm(string& info);
+    // sets the second source register from a string extracted by main
+    // Must be any of R0-R15
     
     void setBinaryEncoding();
     // Implements the grandparent pure virtual function

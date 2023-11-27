@@ -24,12 +24,9 @@ public:
     // returns the value that L is set to (might change this later)
     
     void setBinaryEncoding();
-    // Implements the grandparent pure virtual function
+    // Implements the parent pure virtual function
     // This will return, in binary, the following fields in the following order:
     // cond, op, '1', L, imm24
-    
-    void setOp();
-    // sets the operation code to 10
 };
 
 #endif /* branchInstruction_hpp */

@@ -82,7 +82,7 @@ bool openOutput(ofstream& output, string& path) { // opens output file stream wi
 
 unsigned int const checkCondition(string& instruction) { //
     /* Gets the last part of the instruction to determine if there is a condition suffix.
-     Returns the binary encoding of the instruction. */
+     Returns the decimal equivalent of the binary encoding of the suffix. */
     const int count = 14;
     if (instruction.size() == 1) // this is an unconditional branch
         return 14; // the default condition AL is #15
@@ -115,7 +115,7 @@ unsigned int getInstructionType(string excerpt) {
         return 3; // this signifies a label
 }
 
-unsigned int readRegister(string reg) { // THROWS InvalidString(); it could be anything from 0-15, or written as "PC" or "LR"
+unsigned int readRegister(string reg) { // THROWS InvalidString(); it could be anything from 0-15, or written as "PC", "LR", or "SP"
     if (reg == "PC")
         return 15;
     else if (reg == "LR")
@@ -123,8 +123,7 @@ unsigned int readRegister(string reg) { // THROWS InvalidString(); it could be a
     else if (reg == "SP")
         return 13;
     else {
-        string num = reg.substr(1,reg.length()-1); // grab all characters after the first one, which will be 'R'
-        unsigned int result = stoi(num);
+        unsigned int result = scrubString(reg); // remove 'R' and any commas and read in hex OR decimal number
         if (result <= 15)
             return (result); // return the string converted to an integer
         else // wow. Xcode's linting saved me from accidentally using || to check for positive on unsigned ints
@@ -133,9 +132,9 @@ unsigned int readRegister(string reg) { // THROWS InvalidString(); it could be a
 }
 
 int readImmediate(string imm) {
-    if (imm.length() == 1)
-        throw InvalidString();
-    return stoi(imm.substr(1, (imm.length()-1) ) ); // calls stoi to extract an int from the string, beginning at 2nd char
+    if (imm.length() <= 1) // don't know how it could be less than one, but just in case
+        throw InvalidString(); // TODO: Reconsider error handling here or removing this function entirely
+    return scrubString(imm); // call the other function to remove the '#', any commas, and read in the decimal or hex value
 }
 
 
@@ -226,13 +225,6 @@ string stringBinToHex(string binaryString) {
     return hexString;
 }
 
-template <size_t X, size_t Y>
-bitset<X +Y> cat(const bitset<X>& b1, const bitset<Y>& b2) { // concatenate two bitsets into one
-    string U = b1.to_string(); // convert to a string
-    string V = b2.to_string(); // convert to a string
-    return bitset<X+Y>(U + V); // operate on the concatenated strings
-}
-
 bool findStringChar(string& info, char target) { // returns true if character present in string
     return (info.find(target) != string::npos);
 }
@@ -246,8 +238,12 @@ bool stringInArray(const string& item, const string searchSpace[], unsigned int 
 }
 
 int scrubString(string& info) {
-    info = info.substr(1,info.size()-1); // cut out the first character
-    if (findStringChar(info, ','))
+    info = info.substr(1,info.size()-1); // cut out the first character (either 'R' or '#')
+    if (findStringChar(info, ',')) // check to see if there is a comma in the string
         info = info.substr(0,info.size()-1); // cut off the comma at the end, if present
-    return stoi(info);
+    if (findStringChar(info, 'x')) { // check for hex values
+        return stoi(info, 0, 16); // return integer from hex
+    } else { // just decimal values (thank goodness)
+        return stoi(info, 0, 10); // return integer from decimal
+    }
 }

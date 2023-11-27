@@ -33,6 +33,13 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
     if (!validInput || !validOutput)
         return -1; // game over, bro.
     
+    /* The following lines pertaining to cin make it check what base the value is in
+     and save me lots of logical checks on what base it being read in. C++ will essentially
+     figure out from the 0x prefix (or lack thereof) whether to treat the number as hex. */
+    inFile.unsetf(std::ios::dec); // force inferral of decimal values
+    // inFile.unsetf(std::ios::oct); // force inferral of octal values (UNUSED)
+    inFile.unsetf(std::ios::hex); // force inferral of hex values
+    
     /* Part II: Scaffolding for the line-by-line loop */
     string currentLine; // define the line that is being analyzed on each iteration
     enum category {data = 0, memory, branch, label}; // define the categories of instruction
@@ -44,8 +51,10 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
         getline(inFile, currentLine, '\n'); // read each line of the input file
         
         /* check for empty lines that don't do anything */
-        if (currentLine == "")
+        if (currentLine == "") {
+            lineCount--;
             continue; // skip to the next iteration
+        }
         
         stringstream line; // stream to make the string act like the input file without changing the actual input file
         line << currentLine; // store the current line into a seperate stream
@@ -61,6 +70,7 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
         /* figure out the condition value and opcode to encode in binary (a.k.a., the first six bits) */
         unsigned int conditionValue = checkCondition(first); // decimal integer representing the condition code
         // THE ABOVE OPERATION WILL TRIM SUFFIXES OFF OF THE INSTRUCTIONS
+        // This operation currently CANNOT recognize the 'S' suffix for setting condition flags
         
         
         string binaryResult, hexOutput; // strings to hold the binary concatenation and the final hex output to write
@@ -70,9 +80,9 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
         /* Part IV: break up the logic by type of instruction */
         switch (instructionType) {
             case data: { // this is a data instruction
-                // might still be a multiplication instruction, but these are not implemented in the prooject
-                // DataInstruction process;
+                // might still be a multiplication instruction, but these are not implemented in the project
                 
+                /* TODO: Replace this function & error handling with something to check for valid, not assign the actual value. That should happen in the object.*/
                 try { // this might not be a valid instruction.
                     string cmd = getDataCmd("PLACEHOLDER"); // store the command in a binary string
                 } catch (BadInstruction()) {
@@ -83,13 +93,15 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
                     return -1;
                 } // If we made it this far, the instruction is indeed valid
                 
-                string Rd, Rn, Src2; // strings for the source, destination, and second source fields
+                // TODO: Make the validity-checking all happen in one function that does its error handling OUTSIDE of main()
+                
+                string Rd, Rn; // strings for the source, destination, and second source fields
                 line >> Rd; // read in the destination register
                 if (first != "MOV")
                 line >> Rn; // read in the source register
                 if (stringInArray(first, dataShifting, 4)) {
                     // This will shift the register, so it is either an immediate-shifter or register-shifted register
-                    // Instruction is one of: AND, EOR, OR, SUB, NOT, RSB, ADD, BIC, ADC, SBC, ORR, MOV, TST
+                    // Instruction is one of: AND, EOR, ORR, SUB, NOT, ADD, ORR
                     if (findStringChar(currentLine, '#')) {
                         // This is an immediate-shifter
                         DataRegister regInst;
@@ -100,7 +112,8 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
                     }
                 } else {
                     // This will NOT shift the register, so it is either operating on immediates or two registers with shamt5 = 0
-                    // Instruction is one of: LSL, LSR, ASR, ROR, RRX
+                    // Instruction is one of: LSL, LSR, ASR, ROR, RRX, MOV
+                    // TODO: MOV requires special handling, as bits 11:4 are all 0
                     if (findStringChar(currentLine, '#')) {
                         // This is operating directly on unshifted immediates
                         DataImmediate immInst;
@@ -119,6 +132,7 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
                         immInst.set_imm8(immediate);
                     } else {
                         // This is operating on two nonshifting registers
+                        // TODO: MOV requires special handling, as bits 11:4 are all 0
                         DataRegister regInst;
                     }
                 }
@@ -149,6 +163,7 @@ int main(int argc, const char * argv[]) { // HERE WE GOOOOOOOOOOOOOOO!!!...
             break;
         }
         
+        /* TODO: Replace the following section with logic in the class objects */
         try { // attempt to convert the binary encoding of the assembly instruction to hexadecimal values
             hexOutput = stringBinToHex(binaryResult); // call the function to convert the (ideally 32-bit) binary string to a hex string
         } catch (InvalidString) {

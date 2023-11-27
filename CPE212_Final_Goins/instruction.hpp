@@ -20,8 +20,7 @@ protected: // the whole point is to inherit these shared members
     bitset<32> binaryEncoding; // 32 bits for the total instruction
 public:
     /* Constructor Functions */
-    Instruction(); // default constructor
-    Instruction(bitset<4> c, bitset<2> o); // build from a known condition and opcode
+    Instruction(); // default constructor does nothing
     
     /* Transofrmer Functions */
     void setCondition(unsigned int value);
