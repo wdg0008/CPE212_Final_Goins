@@ -27,6 +27,11 @@ public:
     // Implements the parent pure virtual function
     // This will return, in binary, the following fields in the following order:
     // cond, op, '1', L, imm24
+    
+    void set_imm24(map<string, int>& labels, string target);
+    // sets the imm24 field to the address of the target in the map of labels
+    // assumes no label is repeated twice and that it exists
+    // TODO: Consider error handling and exceptions for this
 };
 
 #endif /* branchInstruction_hpp */

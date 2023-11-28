@@ -73,16 +73,16 @@ bool openOutput(ofstream& output, string& path) { // opens output file stream wi
     } catch (FailedOpening) {
         cout << "\nERROR: The input file failed to open.\n\n";
         return 0; // game over, man
-    } 
-    catch (...) {
+    } catch (...) {
         cout << "\nERROR: Unknown error encountered. Terminating program.\n\n";
         return 0;
     }
 }
 
-unsigned int const checkCondition(string& instruction) { //
+unsigned int const checkCondition(string& instruction) { // returns the appropriate condition based on the instruction suffix
     /* Gets the last part of the instruction to determine if there is a condition suffix.
-     Returns the decimal equivalent of the binary encoding of the suffix. */
+     Returns the decimal equivalent of the binary encoding of the suffix. 
+     THIS WILL REMOVE THE SUFFIX FROM THE INSTRUCTION*/
     const int count = 14;
     if (instruction.size() == 1) // this is an unconditional branch
         return 14; // the default condition AL is #15
@@ -94,49 +94,42 @@ unsigned int const checkCondition(string& instruction) { //
     for (int index = 0; index < count && suffixes[index] != ending; index++) { // check for presence of each suffix
         if (ending == suffixes[index]) {
             instruction = instruction.substr(0,3); // discard the suffix information to make subsequent processing simpler
+            cout << "The suffix of" << instruction << "is: " << suffixes[index] << endl; // debug line
             return index; // if the last two characters are exactly one of the suffixes, return that.
         }
     }
+    cout << "The default suffix, AL, was implied for instruction " << instruction << endl; // debug info
     return 14; // if no suffix was present, assume the AL suffix for constant execution.
 }
 
 unsigned int getInstructionType(string excerpt) {
     const string data[10] = {"MOV", "LSL", "LSR", "ASR", "ROR", "ADD", "SUB", "AND", "ORR", "CMP"}; // data-processing instructions
     string size3 = excerpt.substr(0,3); // ignore any potential suffix information
-    for (int i = 0; i < 10; i++) { // if the instruction is any of those in the array, it is data-processing.
-        if (size3 == data[i])
-            return 0; // the op code in decimal
-    }
+    if (stringInArray(size3, data, 10)) // if the instruction is in the list of data-processing, return 0
+        return 0;
     if (size3 == "LDR" || size3 == "STR")
         return 1; // the op code for memory in decimal
     else if (excerpt.substr(0,1) == "B" || excerpt.substr(0,2) == "BL") // check for smaller instructions
         return 2; // the op code for branching in decimal
-    else
+    else // this is NOT a supported instruction
         return 3; // this signifies a label
 }
 
 unsigned int readRegister(string reg) { // THROWS InvalidString(); it could be anything from 0-15, or written as "PC", "LR", or "SP"
-    if (reg == "PC")
+    if (reg == "PC") // special name for program counter
         return 15;
-    else if (reg == "LR")
+    else if (reg == "LR") // special name for link register
         return 14;
-    else if (reg == "SP")
+    else if (reg == "SP") // special name for stack pointer
         return 13;
-    else {
-        unsigned int result = scrubString(reg); // remove 'R' and any commas and read in hex OR decimal number
+    else { // must be a register in the typical "RXX" or "RX" format
+        unsigned int result = scrubString(reg); // remove 'R' and any commas before reading in hex OR decimal number
         if (result <= 15)
             return (result); // return the string converted to an integer
         else // wow. Xcode's linting saved me from accidentally using || to check for positive on unsigned ints
-            throw InvalidString(); // there are only 16 registers (0-15) in ARM32v7 architectures
+            throw InvalidString(); // there are only 16 registers (0-15) in ARM32v4 architectures
     }
 }
-
-int readImmediate(string imm) {
-    if (imm.length() <= 1) // don't know how it could be less than one, but just in case
-        throw InvalidString(); // TODO: Reconsider error handling here or removing this function entirely
-    return scrubString(imm); // call the other function to remove the '#', any commas, and read in the decimal or hex value
-}
-
 
 string getDataCmd(string instruction) {
     if (instruction == "ADD")
@@ -242,8 +235,33 @@ int scrubString(string& info) {
     if (findStringChar(info, ',')) // check to see if there is a comma in the string
         info = info.substr(0,info.size()-1); // cut off the comma at the end, if present
     if (findStringChar(info, 'x')) { // check for hex values
-        return stoi(info, 0, 16); // return integer from hex
+        return stoi(info, nullptr, 16); // return integer from hex
     } else { // just decimal values (thank goodness)
-        return stoi(info, 0, 10); // return integer from decimal
+        return stoi(info, nullptr, 10); // return integer from decimal
+    }
+}
+
+int grabIntAfterChar(stringstream& somestream, char predecessor) {
+    somestream.ignore(INT8_MAX, predecessor); // skip to the character after the predecessor
+int value = 0; // set default value to 0
+    somestream >> value;
+    return value;
+}
+
+unsigned int getNextReg(stringstream& somestream) {
+    string regName;
+    somestream >> regName;
+    string::size_type position;
+    if (regName.find("PC") != string::npos) { // "PC" is contained in the string
+        return 15;
+    } else if (regName.find("LR") != string::npos) { // "PC" is contained in the string
+        return 14;
+    } else if (regName.find("SP") != string::npos) { // "PC" is contained in the string
+        return 13;
+    } else {
+        for (int c = 0; !isdigit(regName[c]); c++) {
+            regName = regName.substr(1,regName.size()-1); // cut off the non-digit value
+        }
+        return (stoi(regName)%16); // modulo 16 to prevent impossible register values
     }
 }

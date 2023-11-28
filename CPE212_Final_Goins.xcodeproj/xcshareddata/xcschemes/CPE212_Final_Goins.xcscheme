@@ -52,11 +52,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "./testcase1.s"
+            argument = "./testcase-1.s"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "./testcase-1.asm"
+            argument = "./output-1.asm"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

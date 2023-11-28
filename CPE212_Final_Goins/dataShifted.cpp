@@ -8,7 +8,8 @@
 #include "dataShifted.hpp"
 
 DataShifted::DataShifted() {
-    Rm = 0;
+    Rn = 0; // first source register is always 0
+    I = false;
 }
 
 void DataShifted::setBinaryEncoding() {
@@ -31,4 +32,23 @@ void DataShifted::setBinaryEncoding() {
         }
     }
     return;
+}
+
+void DataShifted::set_Rm(string& info) {
+    Rm = bitset<4>(readRegister(info)); // parse the register string for an unsigned int, then cast to 4 bits
+}
+
+void DataShifted::set_Rs(string& info) {
+    Rs = bitset<4>(readRegister(info));
+}
+
+void DataShifted::set_sh(string& info) { // sets the shift type based on the instruction name
+    if (info == "MOV" || info == "LSL") // MOV requires special handling, as bits 11-4 are all 0
+        sh = 0;
+    else if (info == "LSR")
+        sh = 1;
+    else if (info == "ASR")
+        sh = 2;
+    else if (info == "ROR" /* || info == "RRX" */) // RRX has the same sh value
+        sh = 3;
 }

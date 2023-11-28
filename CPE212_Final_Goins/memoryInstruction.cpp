@@ -66,7 +66,9 @@ void MemoryInstruction::setBinaryEncoding() {
 }
 
 MemoryInstruction::MemoryInstruction() {
-    op = bitset<2>(1);
+    op = bitset<2>(1); // the op code for memory is always 1
+    B = false; // assumption based on the fact that only STR and LDR are implemented
+    U = false; // assumption because I think adding negatives works
 }
 
 /* These were copied from the data-processing instructions but NOT put in the instruction grandparent class, since branch cannot use them */
@@ -76,4 +78,28 @@ void MemoryInstruction::set_Rn(string& info) {
 
 void MemoryInstruction::set_Rd(string& info) {
     Rd = bitset<4>(readRegister(info)); // parse the register string for an unsigned int, then cast to 4 bits
+}
+
+void const MemoryInstruction::set_values(string& lineString) {
+    // the immediate bit is handled by the child objects that encapsulate this parent
+    (lineString.substr(0, 3) == "LDR") ? (L = true) : (L = false); // check for load bit from first 3 chars
+    if (!findStringChar(lineString, '[') && !findStringChar(lineString, ']')) {
+        // this is operating on a single register or immediate, which is weird
+        P = true;
+        W = false;
+    }
+    string::size_type lBracePos = lineString.find('['); // position of the left brace
+    string::size_type rBracePos = lineString.find(']'); // position of the right brace
+    string::size_type braceDiff = rBracePos-lBracePos;
+    string inBraces = lineString.substr(lBracePos,braceDiff);
+    if (findStringChar(inBraces, ',')) { // either offset OR pre-index
+        P = true;
+        (findStringChar(inBraces, '!')) ? (W = true) : (W = false);
+        // set the writeback bit by checking for an exclamation point
+        // if the '!' is present, it is pre-indexed, which makes W true
+    } else {
+        // post-index
+        P = false;
+        W = false;
+    }
 }

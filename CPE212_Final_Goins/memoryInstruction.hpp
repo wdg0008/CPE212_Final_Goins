@@ -33,9 +33,8 @@ public:
     MemoryInstruction();
     // Default constructor sets op to 1
     
-    void set_values(string& info);
-    // sets the value of I based on whether an immedaite is present, shown by '#'
-    // sets the value of all the other stuff, which I don't remember
+    void const set_values(string& info);
+    // sets the value of P, W, L based on what type of addressing is used
     
     void set_Rn(string& info);
     // sets the index of the source register
@@ -46,10 +45,6 @@ public:
     // set the index of the destination register
     // will need to strip off 'R' and any commas
     // will be a wrapper for lots of bitset functionality
-    
-    void accede(Instruction parent);
-    // virtual function will copy all the parent data to the child class
-    // TODO: Evaluate this function for removal
     
     void setBinaryEncoding();
     // virtual function will set cond, op, funct, Rn, and Rd

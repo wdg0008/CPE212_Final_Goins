@@ -9,7 +9,7 @@
 
 DataInstruction::DataInstruction() {
     op = bitset<2>(0);
-    S = false;
+    S = false; // assumption I am making that no 'S' prefixes are used
 }
 
 void DataInstruction::set_S(bool value) {
@@ -33,10 +33,12 @@ void DataInstruction::set_cmd(string& instruction) {
         cmd = bitset<4>("1010");
         S = true; // not exactly sure where to do this
     }
-    else if (instruction == "MOV" || instruction == "LSL" || instruction == "LSR" || instruction == "ASR" || instruction == "ROR")
+    else if (instruction == "MOV" || instruction == "LSL" || instruction == "LSR" || instruction == "ASR" || instruction == "ROR" /* || instruction == "RRX" */)
         cmd = bitset<4>("1101");
+    /* // the getInstructionType function guarantees that only valid data instructions have made it thus far
     else
         throw (BadInstruction());
+     */
 }
 
 void DataInstruction::set_Rn(string& info) {

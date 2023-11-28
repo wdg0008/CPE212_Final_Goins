@@ -18,6 +18,7 @@
 #include <map>
 #include <bitset>
 #include <sstream>
+#include <stdexcept> // built-in exceptions
 
 using namespace std;
 
@@ -34,11 +35,13 @@ bool openOutput(ofstream& output, string& path); // opens output file stream wit
 
 unsigned int const checkCondition(string& instruction); // check the end of the instruction string for one of the conditions
 
-unsigned int getInstructionType(string excerpt); // return the op code for the instruction or decide it is a label
+unsigned int getInstructionType(string excerpt);
+// return the op code for the instruction or decide it is a label
+// does NOT change the string passed to it as an argument
 
-unsigned int readRegister(string reg); // get the decimal index value of the register
-
-int readImmediate(string imm); // get the immediate out of the instruction
+unsigned int readRegister(string reg);
+// get the decimal index value of the register
+// wraps a call to scrubString with code to detect special register names
 
 string getDataCmd(string instruction); // get the binary cmd value for the data-processing instruction as a string
 
@@ -57,4 +60,10 @@ int scrubString(string& info);
 // removes the first character of the string and any commas at the end
 // converts the cleaned string into an integer
 
+int grabIntAfterChar(stringstream& somestream, char predecessor);
+// extracts an integer from the stringstream after ignoring until the specified character
+
+unsigned int getNextReg(stringstream& somestream);
+// returns the next register in the stringstream
+// includes funcitonality to detect the special register names
 #endif /* finalFunctions_hpp */

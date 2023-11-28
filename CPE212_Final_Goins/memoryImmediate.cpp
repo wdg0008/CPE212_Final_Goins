@@ -19,6 +19,5 @@ void MemoryImmediate::setBinaryEncoding() {
 }
 
 void MemoryImmediate::set_imm12(string& immString) {
-    imm12 = bitset<12>(readImmediate(immString)); // cast the int obtained from the cleaned string to a bitset
-    // TODO: Watch out for error handling here
+    imm12 = bitset<12>(scrubString(immString)); // cast the int obtained from the cleaned string to a bitset
 }

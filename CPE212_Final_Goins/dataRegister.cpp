@@ -9,6 +9,7 @@
 
 DataRegister::DataRegister() {
     op = 0;
+    I = false;
 }
 
 void DataRegister::set_Rm(string& info) {
@@ -16,7 +17,7 @@ void DataRegister::set_Rm(string& info) {
 }
 
 void DataRegister::set_shamt5(string& info) {
-    shamt5 = bitset<5>(readImmediate(info)); // clean up the string to get an int and cast to bitset
+    shamt5 = bitset<5>(scrubString(info)); // clean up the string to get an int and cast to bitset
 }
 
 void DataRegister::set_sh(string& info) { // sets the shift type based on the instruction name
